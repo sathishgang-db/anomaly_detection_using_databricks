@@ -25,25 +25,26 @@ import glob
 
 # COMMAND ----------
 
-username='sathish.gangichetty@databricks.com'
-# File location and type
-file_location = "/FileStore/tables/creditcard.csv"
+current_user = dbutils.notebook.entry_point.getDbutils().notebook().getContext().tags().apply('user')
+dbutils.widgets.text("username",current_user)
+# # File location and type
+# file_location = "/FileStore/tables/creditcard.csv"
 input_file_loc = f"/dbfs/Users/{username}/anomaly_detection"
-file_type = "csv"
-dbutils.fs.mkdirs(input_file_loc)
-dbutils.fs.cp(file_location, input_file_loc)
-# CSV options
-infer_schema = "true"
-first_row_is_header = "true"
-delimiter = ","
+# file_type = "csv"
+# dbutils.fs.mkdirs(input_file_loc)
+# dbutils.fs.cp(file_location, input_file_loc)
+# # CSV options
+# infer_schema = "true"
+# first_row_is_header = "true"
+# delimiter = ","
 
-# The applied options are for CSV files. For other file types, these will be ignored.
-df = spark.read.format(file_type) \
-  .option("inferSchema", infer_schema) \
-  .option("header", first_row_is_header) \
-  .option("sep", delimiter) \
-  .load(file_location)
-
+# # The applied options are for CSV files. For other file types, these will be ignored.
+# df = spark.read.format(file_type) \
+#   .option("inferSchema", infer_schema) \
+#   .option("header", first_row_is_header) \
+#   .option("sep", delimiter) \
+#   .load(file_location)
+df = spark.read.csv("s3://sagang-public/creditcard.csv", inferSchema=True, header=True)
 (df.write
  .format("delta")
  .mode("overwrite")
