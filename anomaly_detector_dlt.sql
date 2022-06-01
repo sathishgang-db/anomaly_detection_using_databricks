@@ -28,6 +28,6 @@ AS SELECT * FROM STREAM(live.transaction_readings_raw)
 
 -- COMMAND ----------
 
-CREATE OR REFRESH STREAMING LIVE TABLE predictions
-COMMENT "Use the DeepSVDD pandas udf registered in the previous step to predict anomalous transaction readings"
-AS SELECT cust_id, detect_anomaly(*) as anomalous from STREAM(live.transaction_readings_cleaned)
+-- CREATE OR REFRESH STREAMING LIVE TABLE predictions
+-- COMMENT "Use the DeepSVDD pandas udf registered in the previous step to predict anomalous transaction readings"
+-- AS SELECT cust_id, detect_anomaly(*) as anomalous from STREAM(live.transaction_readings_cleaned)
